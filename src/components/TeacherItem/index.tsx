@@ -7,26 +7,41 @@ import HeartOutlineIcon from '../../assets/images/icons/heart-outline.png'
 import UnfavoriteIcon from '../../assets/images/icons/unfavorite.png'
 import WhatsappIcon from '../../assets/images/icons/whatsapp.png'
 
-function TeacherItem() {
+export interface Teacher {
+	avatar: string;
+	bio: string;
+	cost: number;
+	id: number;
+	name: string;
+	subject: string;
+	user_id: number;
+	whatsapp: string;
+}
+
+interface TeacherItemProps {
+	teacher: Teacher
+}
+
+const TeacherItem: React.FC<TeacherItemProps> = ({ teacher }) => {
 	return (
 		<View style={styles.container}>
 			<View style={styles.profile}>
-				<Image style={styles.avatar} source={{ uri: 'https://avatars3.githubusercontent.com/u/15891351?s=460&u=ccd24d483ef44e3b3a05b17247987eb5a9a42e18&v=4' }} />
+				<Image style={styles.avatar} source={{ uri: teacher.avatar }} />
 
 				<View style={styles.profileInfo}>
-					<Text style={styles.name}>Gustavo Ramaldes</Text>
-					<Text style={styles.subject}>Física</Text>
+					<Text style={styles.name}>{teacher.name}</Text>
+					<Text style={styles.subject}>{teacher.subject}</Text>
 				</View>
 			</View>
 			
 			<Text style={styles.bio}>
-				Lorem ipsum dolor sit amet consectetur adipisicing elit. Dolorem, ullam sed voluptas ipsam quibusdam consequuntur corrupti magni aut ut nemo maxime tempora cupiditate iste cumque, laborum saepe maiores labore eligendi!
+				{teacher.bio}
 			</Text>
 
 			<View style={styles.footer}>
 				<Text style={styles.price}>
 					Preço/hora: {'    '}
-					<Text style={styles.priceValue}>R$ 20,00</Text>
+					<Text style={styles.priceValue}>R$ {teacher.cost}</Text>
 				</Text>
 
 				<View style={styles.buttonsContainer}>
