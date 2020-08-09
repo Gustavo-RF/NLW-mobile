@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Text } from 'react-native';
+import AsyncStorage from "@react-native-community/async-storage";
 
 import styles from './styles';
 import PageHeader from '../../components/PageHeader';
@@ -16,11 +17,26 @@ function TeacherList() {
 
 	const [ teachers, setTeachers ] = useState([]);
 
+	const [ favorites, setFavorites ] = useState<number[]>([]);
+	
+	function loadFavorites() {
+		AsyncStorage.getItem('favorites').then(res => {
+			if(res) {
+				const favoritedTeachers = JSON.parse(res);
+				const favoritedTeachersIds = favoritedTeachers.map((teacher:Teacher) => {
+					return teacher.id;
+				}) 
+				setFavorites(favoritedTeachersIds);
+			}
+		})
+	}
+
 	function handleToogleFiltersVisible() {
 		setFiltersVisible(!filtersVisible);
 	}
 
 	async function handleFiltersSubmit() {
+		loadFavorites()
 		const res = await api.get('/classes', {
 			params: {
 				subject,
@@ -82,15 +98,12 @@ function TeacherList() {
 			{
 				teachers.map((teacher: Teacher) => {
 					return (
-						<TeacherItem key={teacher.id} teacher={teacher} />
+						<TeacherItem key={teacher.id} teacher={teacher} favorited={
+							favorites.includes(teacher.id)
+						} />
 					)
 				})
 			}
-				{/* <TeacherItem />
-				<TeacherItem />
-				<TeacherItem />
-				<TeacherItem />
-				<TeacherItem /> */}
 
 			</ScrollView>
 
